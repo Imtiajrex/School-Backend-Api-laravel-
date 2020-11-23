@@ -26,13 +26,15 @@ class GpaController extends Controller
         $user = $request->user();
         if ($user->can($permission)) {
             $request->validate([
-                "session_id" => 'required',
-                "name" => "required"
+                "starting_number" => 'required',
+                "ending_number" => 'required',
+                "gpa" => "required"
             ]);
-            if (Gpa::where(["name" => $request->name])->first() == null) {
+            if (Gpa::where(["gpa" => $request->gpa])->first() == null) {
                 $Gpa = new Gpa;
-                $Gpa->session_id = $request->session_id;
-                $Gpa->name = $request->name;
+                $Gpa->starting_number = $request->starting_number;
+                $Gpa->ending_number = $request->ending_number;
+                $Gpa->gpa = $request->gpa;
                 if ($Gpa->save()) {
                     return ResponseMessage::success("Gpa Created!");
                 } else {
@@ -52,16 +54,22 @@ class GpaController extends Controller
         $user = $request->user();
         if ($user->can($permission)) {
             $request->validate([
-                "session_id" => 'required',
-                "name" => "required"
+                "starting_number" => 'required',
+                "ending_number" => 'required',
+                "gpa" => "required"
             ]);
             $Gpa = Gpa::find($id);
-            $Gpa->session_id = $request->session_id;
-            $Gpa->name = $request->name;
-            if ($Gpa->save()) {
-                return ResponseMessage::success("Gpa Updated!");
+            if ($Gpa != null) {
+                $Gpa->starting_number = $request->starting_number;
+                $Gpa->ending_number = $request->ending_number;
+                $Gpa->gpa = $request->gpa;
+                if ($Gpa->save()) {
+                    return ResponseMessage::success("Gpa Updated!");
+                } else {
+                    return ResponseMessage::fail("Couldn't Update Gpa!");
+                }
             } else {
-                return ResponseMessage::fail("Couldn't Update Gpa!");
+                ResponseMessage::unauthorized($permission);
             }
         } else {
             ResponseMessage::unauthorized($permission);

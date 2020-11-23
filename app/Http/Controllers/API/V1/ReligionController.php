@@ -53,12 +53,15 @@ class ReligionController extends Controller
                 "religion_name" => "required"
             ]);
             $religion = Religion::find($id);
-            $religion->religion_name = $request->religion_name;
-            if ($religion->save()) {
-                return ResponseMessage::success("Religion Updated!");
-            } else {
-                return ResponseMessage::fail("Couldn't Update Religion!");
-            }
+            if ($religion != null) {
+                $religion->religion_name = $request->religion_name;
+                if ($religion->save()) {
+                    return ResponseMessage::success("Religion Updated!");
+                } else {
+                    return ResponseMessage::fail("Couldn't Update Religion!");
+                }
+            } else
+                return ResponseMessage::fail("Religion Doesn't Exist!");
         } else {
             ResponseMessage::unauthorized($permission);
         }
@@ -69,8 +72,16 @@ class ReligionController extends Controller
         $permission = "Delete Religion";
         $user = $request->user();
         if ($user->can($permission)) {
-            if (Religion::destroy($id))
-                return ResponseMessage::success("Religion Deleted!");
+            if (Religion::find($id) != null) {
+                if (Religion::destroy($id)) {
+                    return ResponseMessage::success("Religion Deleted!");
+                } else {
+                    return ResponseMessage::fail("Couldn't Delete Religion!");
+                }
+            } else {
+
+                return ResponseMessage::fail("Religion Doesn't Exist!");
+            }
         } else {
             ResponseMessage::unauthorized($permission);
         }

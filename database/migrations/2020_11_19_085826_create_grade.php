@@ -17,7 +17,7 @@ class CreateGrade extends Migration
             $table->id();
             $table->float("starting_gpa");
             $table->float("ending_gpa");
-            $table->float("grade");
+            $table->string("grade");
         });
     }
 

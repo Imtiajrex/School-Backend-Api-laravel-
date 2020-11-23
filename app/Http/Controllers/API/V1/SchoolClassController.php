@@ -54,11 +54,15 @@ class SchoolClassController extends Controller
                 "name" => "required"
             ]);
             $school_class = SchoolClass::find($id);
-            $school_class->name = $request->name;
-            if ($school_class->save()) {
-                return ResponseMessage::success("Class Updated!");
+            if ($school_class != null) {
+                $school_class->name = $request->name;
+                if ($school_class->save()) {
+                    return ResponseMessage::success("Class Updated!");
+                } else {
+                    return ResponseMessage::fail("Couldn't Update Class!");
+                }
             } else {
-                return ResponseMessage::fail("Couldn't Update Class!");
+                return ResponseMessage::fail("Class Doesn't Exist!");
             }
         } else {
             ResponseMessage::unauthorized($permission);
@@ -73,6 +77,8 @@ class SchoolClassController extends Controller
             if (SchoolClass::find($id) != null) {
                 if (SchoolClass::destroy($id)) {
                     return ResponseMessage::success("Class Deleted!");
+                } else {
+                    return ResponseMessage::fail("Couldn't Delete Class!");
                 }
             } else {
                 return ResponseMessage::fail("Class Doesn't Exist!");

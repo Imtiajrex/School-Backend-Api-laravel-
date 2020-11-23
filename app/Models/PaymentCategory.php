@@ -9,4 +9,5 @@ class PaymentCategory extends Model
 {
     use HasFactory;
     protected $table = "payment_category";
+    public $timestamps = false;
 }
