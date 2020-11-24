@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Models\Religion;

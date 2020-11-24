@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResponseMessage;
 use App\Models\Department;
+use App\Models\SchoolClass;
 use App\Models\Session;
 use Illuminate\Http\Request;
 
@@ -27,13 +28,14 @@ class DepartmentController extends Controller
         $user = $request->user();
         if ($user->can($permission)) {
             $request->validate([
-                "session_id" => 'required',
-                "name" => "required"
+                "session_id" => 'required|numeric',
+                "name" => "required|string"
             ]);
             if (Department::where(["session_id" => $request->session_id, "name" => $request->name])->first() == null) {
                 $department = new Department;
-                $department->session_id = $request->session_id;
                 if (Session::find($request->session_id)) {
+                    $department->session_id = $request->session_id;
+                    $department->class_id = $request->class_id;
                     $department->name = $request->name;
                     if ($department->save()) {
                         return ResponseMessage::success("Department Created!");
@@ -57,13 +59,14 @@ class DepartmentController extends Controller
         $user = $request->user();
         if ($user->can($permission)) {
             $request->validate([
-                "session_id" => 'required',
-                "name" => "required"
+                "session_id" => 'required|numeric',
+                "name" => "required|string"
             ]);
             $department = Department::find($id);
             if ($department != null) {
-                $department->session_id = $request->session_id;
                 if (Session::find($request->session_id)) {
+                    $department->session_id = $request->session_id;
+                    $department->class_id = $request->class_id;
                     $department->name = $request->name;
                     if ($department->save()) {
                         return ResponseMessage::success("Department Updated!");

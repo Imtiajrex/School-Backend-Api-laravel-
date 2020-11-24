@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClassDepartmentsHasSubjects extends Migration
+class CreateClassHasSubjects extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateClassDepartmentsHasSubjects extends Migration
      */
     public function up()
     {
-        Schema::create('class_departments_has_subjects', function (Blueprint $table) {
+        Schema::create('class_has_subjects', function (Blueprint $table) {
             $table->unsignedBigInteger("class_id");
             $table->unsignedBigInteger("department_id");
-            $table->unsignedBigInteger("session_id");
             $table->unsignedBigInteger("subject_id");
 
 
-            $table->foreign("class_id")->references("id")->on("class");
-            $table->foreign("department_id")->references("id")->on("department");
-            $table->foreign("session_id")->references("id")->on("session");
-            $table->foreign("subject_id")->references("id")->on("subjects");
+            $table->foreign("class_id")->references("id")->on("class")->onDelete("cascade");
+            $table->foreign("department_id")->references("id")->on("department")->onDelete("cascade");
+            $table->foreign("subject_id")->references("id")->on("subjects")->onDelete("cascade");
         });
     }
 

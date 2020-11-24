@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResponseMessage;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -33,6 +34,7 @@ class RoleController extends Controller
             if (Role::where("name", $request->name)->first() == null) {
                 $role = new Role;
                 $role->name = $request->name;
+                $role->guard_name = 'web';
                 if ($role->save()) {
                     if ($this->assignPermissionToRole($request->name, $request->permissions)) {
                         return ResponseMessage::success("Role Created!");
@@ -104,17 +106,21 @@ class RoleController extends Controller
 
     public function assignPermissionToRole($role_name, $permissions)
     {
-        $role = Role::where("name", $role_name);
+        $role = Role::where("name", $role_name)->first();
         $id = $role->id;
         DB::table('role_has_permissions')->where("role_id", $id)->delete();
         $permissions = json_decode($permissions);
         $success_counter = 0;
         $counter = 0;
         foreach ($permissions as $permission) {
-            if ($role->givePermissionTo($permission->name))
-                $success_counter++;
-
             $counter++;
+            if (Permission::where("name", $permission->name)->first() != null) {
+                if ($role->givePermissionTo($permission->name)) {
+                    $success_counter++;
+                }
+            } else {
+                break;
+            }
         }
 
         if ($success_counter == $counter)

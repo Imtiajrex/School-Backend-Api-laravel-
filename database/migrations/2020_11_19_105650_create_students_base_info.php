@@ -19,8 +19,6 @@ class CreateStudentsBaseInfo extends Migration
             $table->string("student_image");
             $table->string("gender");
             $table->string("age");
-            $table->foreignId('class_id')->references("id")->on("class");
-            $table->bigInteger('department_id');
             $table->string("primary_phone");
             $table->string("secondary_phone");
             $table->string("student_email");

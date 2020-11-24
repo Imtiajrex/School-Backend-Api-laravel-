@@ -16,9 +16,6 @@ class CreateDepartmentTable extends Migration
         Schema::create('department', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->unsignedBigInteger("session_id");
-
-            $table->foreign("session_id")->references("id")->on("session");
         });
     }
 

@@ -1,18 +1,20 @@
 <?php
 
-use App\Http\Controllers\API\V1\ReligionController;
-use App\Http\Controllers\API\V1\SchoolClassController;
+use App\Http\Controllers\API\Settings\ClassHasDepartmentController;
+use App\Http\Controllers\API\Settings\ClassHasSubjectsController;
+use App\Http\Controllers\API\Settings\ReligionController;
+use App\Http\Controllers\API\Settings\SchoolClassController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\V1\UserController;
-use App\Http\Controllers\API\V1\DepartmentController;
-use App\Http\Controllers\API\V1\GpaController;
-use App\Http\Controllers\API\V1\GradeController;
-use App\Http\Controllers\API\V1\InstituteInfoController;
-use App\Http\Controllers\API\V1\PaymentCategoryController;
-use App\Http\Controllers\API\V1\SubjectController;
-use App\Http\Controllers\API\V1\PermissionController;
-use App\Http\Controllers\API\V1\RoleController;
-use App\Http\Controllers\API\V1\SessionController;
+use App\Http\Controllers\API\Settings\UserController;
+use App\Http\Controllers\API\Settings\DepartmentController;
+use App\Http\Controllers\API\Settings\GpaController;
+use App\Http\Controllers\API\Settings\GradeController;
+use App\Http\Controllers\API\Settings\InstituteInfoController;
+use App\Http\Controllers\API\Settings\PaymentCategoryController;
+use App\Http\Controllers\API\Settings\SubjectController;
+use App\Http\Controllers\API\Settings\PermissionController;
+use App\Http\Controllers\API\Settings\RoleController;
+use App\Http\Controllers\API\Settings\SessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,5 +68,11 @@ Route::middleware("auth:sanctum")->group(function () {
             'index', 'store', 'update', 'destroy'
         ]);
         Route::get('permission', [PermissionController::class, "index"]);
+
+        Route::get('assign_subject', [ClassHasSubjectsController::class, "index"]);
+        Route::post('assign_subject', [ClassHasSubjectsController::class, "assign"]);
+
+        Route::get('assign_department', [ClassHasDepartmentController::class, "index"]);
+        Route::post('assign_department', [ClassHasDepartmentController::class, "assign"]);
     });
 });
